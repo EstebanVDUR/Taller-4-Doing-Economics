@@ -1,0 +1,17 @@
+clear all
+set more off
+
+cd "C:\Users\Esteban\Desktop\Taller-4-Doing-Economics-main"
+
+import excel "data/raw/experimento_1.xlsx", sheet("Hoja1") firstrow clear
+
+rename Playerscontri~s contributions
+
+collapse (mean) contributions, by(Round)
+
+twoway line contributions Round, ///
+    title("Evolución de la Contribución Promedio en Juego de Bienes Públicos") ///
+    subtitle("Períodos 1 a 10") ///
+    xtitle("Período del Juego") ///
+    ytitle("Contribución Promedio por Participante") ///
+    caption("Datos del experimento 1 - Taller 4")
