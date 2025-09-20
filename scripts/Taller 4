@@ -4,17 +4,12 @@ set more off
 * Cambiar directorio a la carpeta del proyecto
 cd "C:\Users\Esteban\Desktop\Taller-4-Doing-Economics-main"
 
-* ----------------- Punto 2.1 -----------------
-* Importar datos del experimento 1, hoja "Hoja1"
+* -------------------------------------
+* Punto 2.1: Gráfico contribución periodo
+* -------------------------------------
 import excel "data/raw/experimento_1.xlsx", sheet("Hoja1") firstrow clear
-
-* Renombrar variable truncada a nombre manejable
 rename Playerscontri~s contributions
-
-* Calcular la media de contribuciones por periodo (Round)
 collapse (mean) contributions, by(Round)
-
-* Graficar contribución media por periodo con títulos descriptivos
 twoway line contributions Round, ///
     title("Evolución de la Contribución Promedio en Juego de Bienes Públicos") ///
     subtitle("Períodos 1 a 10") ///
@@ -22,26 +17,15 @@ twoway line contributions Round, ///
     ytitle("Contribución Promedio por Participante") ///
     caption("Datos del experimento 1 - Taller 4")
 
-* ----------------- Punto 2.2 -----------------
-* Importar datos del experimento 2 sin la primera fila como encabezado
+* --------------------------------------
+* Punto 2.2: Gráfico promedio contribución
+* --------------------------------------
 import excel "data/raw/experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:R12) clear
-
-* Transformar variables string a numéricas para análisis; "B" para Periodo, "R" para Promedio
 gen Period = real(B)
 gen Promedio = real(R)
-
-* Eliminar filas sin datos numéricos si es necesario
 drop if Period == .
-
-* Graficar promedio nacional de contribución sin castigo por periodo
 twoway line Promedio Period, ///
     title("Promedio Nacional de Contribución por Periodo (Sin Castigo)") ///
     xtitle("Periodo") ///
     ytitle("Contribución Promedio Nacional") ///
     caption("Experimento 2 - Sin castigo")
-
-* Estadísticas descriptivas para análisis adicional
-summarize Promedio, detail
-
-* Guardar resultados para reporte posterior
-outsheet using "resultados_contribuciones2.csv", replace
