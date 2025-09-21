@@ -94,15 +94,8 @@ graph bar (mean) Prom_sin_cas Prom_con_cas, over(Periodo) title("Contribuciones 
 
 
 
-* --------------------------------------
-* Punto 2.2: Gráfico promedio contribución
-* --------------------------------------
-import excel "data/raw/experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:R12) clear
-gen Period = real(B)
-gen Promedio = real(R)
-drop if Period == .
-twoway line Promedio Period, ///
-    title("Promedio Nacional de Contribución por Periodo (Sin Castigo)") ///
-    xtitle("Periodo") ///
-    ytitle("Contribución Promedio Nacional") ///
-    caption("Experimento 2 - Sin castigo")
+
+
+
+
+
