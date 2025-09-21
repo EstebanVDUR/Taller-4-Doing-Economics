@@ -1,21 +1,98 @@
 clear all
 set more off
 
-* Cambiar directorio a la carpeta del proyecto
-cd "C:\Users\Esteban\Desktop\Taller-4-Doing-Economics-main"
+"P2.1.1"
 
-* -------------------------------------
-* Punto 2.1: Gráfico contribución periodo
-* -------------------------------------
-import excel "data/raw/experimento_1.xlsx", sheet("Hoja1") firstrow clear
-rename Playerscontri~s contributions
-collapse (mean) contributions, by(Round)
-twoway line contributions Round, ///
-    title("Evolución de la Contribución Promedio en Juego de Bienes Públicos") ///
-    subtitle("Períodos 1 a 10") ///
-    xtitle("Período del Juego") ///
-    ytitle("Contribución Promedio por Participante") ///
-    caption("Datos del experimento 1 - Taller 4")
+* Importar datos desde Excel
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_1.xlsx", sheet("Hoja1") firstrow clear
+
+* Renombrar variables
+rename Round rondas
+
+rename Team jugadores
+
+rename Playerscontributions prom_contribucion
+
+rename PayoffsinthisGame prom_pagos
+
+* Asegurar que sea numérica	
+destring prom_contribucion, replace
+destring prom_pagos, replace
+
+* Calcular el promedio de la contribución por ronda
+collapse (mean) prom_contribucion, by (ronda)
+
+* Graficar la contribución promedio a lo largo de las rondas
+twoway (line prom_contribucion ronda, lcolor(green) lwidth(medthick)), title("Contribución promedio a lo largo del juego") xtitle("Periodo") ytitle("Contribución promedio")
+
+
+
+"P2.2.1"
+
+* Importar datos SIN castigo
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A1:R12) firstrow clear
+
+* Renonmbrar variables
+rename Contributionswithoutpunishment Periodo 
+rename R Promedio 
+
+*Conservar solo variables relevantes
+keep Periodo Promedio 
+
+*Renombrar a Promedio sin castigo
+rename Promedio Prom_sin_cas
+
+*Eliminar primera fila
+drop in 1 
+
+*Guardar dataset limpio
+save sin_castigo, replace 
+
+* Importar datos CON castigo
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A15:R26) firstrow clear
+
+* Renombrar variables
+rename Contributionswithpunishment Periodo 
+rename R Promedio 
+
+*Conservar solo variables relevantes
+keep Period Promedio
+
+*Renombrar a Promedio con castigo
+rename Promedio Prom_con_cas
+
+* Eliminar primera fila
+drop in 1
+
+* Guardar dataset limpio
+save con_castigo, replace 
+
+* Unir ambos datasets
+use sin_castigo, clear
+merge 1:1 Periodo using con_castigo 
+
+* Asegurar que variables sean numéricas
+destring Prom_sin_cas, replace 
+destring Prom_con_cas, replace 
+destring Periodo, replace 
+
+* Ordenar por periodo
+sort Periodo
+
+* Graficar comparación
+twoway (line Prom_sin_cas Periodo, lcolor(purple) lwidth(medthick))(line Prom_con_cas Periodo, lcolor(green) lwidth(medthick)), legend(order(1 "Sin castigo" 2 "Con castigo"))ytitle("Contribución promedio") xtitle("Período (1-10)")title("Contribuciones promedio por período")
+
+
+
+"P2.2.2"
+
+* Conservar solo los periodos 1 y 10 (primer y último periodo del experimento)
+keep if Periodo == 1 | Periodo == 10
+
+* Graficar un gráfico de barras comparando las contribuciones promedio
+graph bar (mean) Prom_sin_cas Prom_con_cas, over(Periodo) title("Contribuciones promedio en las rondas 1 y 10") ytitle("Contribución") legend(label(1 "Sin castigo") label(2 "Con castigo"))
+
+
 
 * --------------------------------------
 * Punto 2.2: Gráfico promedio contribución
