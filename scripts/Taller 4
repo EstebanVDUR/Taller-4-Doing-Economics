@@ -90,8 +90,130 @@ graph bar (mean) Prom_sin_cas Prom_con_cas, over(Periodo) title("Contribuciones 
 
 
 
+"P2.3.2"
+
+* Datos SIN castigo
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
+
+* Renombrar variable
+rename Period Periodo
+
+* Conservar solo Periodo 1
+keep if Periodo == 1
+
+* Renombrar todas las ciudades con prefijo "c_"
+rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Pasar de ancho a largo
+reshape long c_, i(Periodo) j(Ciudad) string
+
+* Renombrar variable
+rename c_ Contribucion
+
+* Crear variable que indique si es sin castigo (0)
+gen castigo = 0
+
+* Guardar dataset temporal
+save sin_castigo1, replace
+
+
+* Datos CON castigo
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
+
+* Renombrar variable
+rename Period Periodo
+
+* Conservar solo Periodo 1
+keep if Periodo == 1
+
+* Renombrar todas las ciudades con un prefijo común (c_)
+rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Pasar de ancho a largo
+reshape long c_, i(Periodo) j(Ciudad) string
+
+* Renombrar la variable de contribución
+rename c_ Contribucion
+
+* Crear variable que indique con castigo (1)
+gen castigo = 1
+
+* Guardar dataset temporal
+save con_castigo1, replace
+
+* Unir y aplicar t-test
+
+* Abrir base de sin castigo
+use sin_castigo1, clear
+
+* Unirla con la base de con castigo
+append using con_castigo1
+
+* Prueba t de diferencia de medias entre las dos condiciones (Promedio de contribuciones con castigo vs sin castigo en Periodo 1)
+ttest Contribucion, by(castigo)
 
 
 
+"P2.3.3"
+
+* Datos SIN castigo
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear	
+
+* Renombrar variable
+rename Period Periodo
+
+* Conservar solo Periodo 1
+keep if Periodo == 10
+
+* Renombrar todas las ciudades con prefijo "c_"
+rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Pasar de ancho a largo
+reshape long c_, i(Periodo) j(Ciudad) string
+
+* Renombrar variable
+rename c_ Contribucion
+
+* Crear variable que indique si es sin castigo (0)
+gen castigo = 0
+
+* Guardar dataset temporal
+save sin_castigo1, replace
+
+
+* Datos CON castigo
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
+
+* Renombrar variable
+rename Period Periodo
+
+* Conservar solo Periodo 1
+keep if Periodo == 10
+
+* Renombrar todas las ciudades con un prefijo común (c_)
+rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Pasar de ancho a largo
+reshape long c_, i(Periodo) j(Ciudad) string
+
+* Renombrar la variable de contribución
+rename c_ Contribucion
+
+* Crear variable que indique con castigo (1)
+gen castigo = 1
+
+* Guardar dataset temporal
+save con_castigo1, replace
+
+* Unir y aplicar t-test
+
+* Abrir base de sin castigo
+use sin_castigo1, clear
+
+* Unirla con la base de con castigo
+append using con_castigo1
+
+* Prueba t de diferencia de medias entre las dos condiciones (Promedio de contribuciones con castigo vs sin castigo en Periodo 1)
+ttest Contribucion, by(castigo)
 
 
