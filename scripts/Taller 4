@@ -4,7 +4,7 @@ set more off
 "P2.1.1"
 
 * Importar datos desde Excel
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_1.xlsx", sheet("Hoja1") firstrow clear
 
 * Renombrar variables
 rename Round rondas
@@ -12,7 +12,7 @@ rename Round rondas
 rename Team jugadores
 
 rename Playerscontributions prom_contribucion
-
+ 
 rename PayoffsinthisGame prom_pagos
 
 * Asegurar que sea numérica	
