@@ -1,7 +1,7 @@
 clear all
 set more off
 
-"P2.1.1"
+*P2.1.1
 
 * Importar datos desde Excel
 import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_1.xlsx", sheet("Hoja1") firstrow clear
@@ -27,7 +27,7 @@ twoway (line prom_contribucion ronda, lcolor(green) lwidth(medthick)), title("Co
 
 
 
-"P2.2.1"
+*P2.2.1
 
 * Importar datos SIN castigo
 import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
@@ -80,7 +80,7 @@ twoway (line Prom_sin_cas Periodo, lcolor(purple) lwidth(medthick))(line Prom_co
 
 
 
-"P2.2.2"
+*P2.2.2
 
 * Conservar solo los periodos 1 y 10 (primer y último periodo del experimento)
 keep if Periodo == 1 | Periodo == 10
@@ -90,7 +90,7 @@ graph bar (mean) Prom_sin_cas Prom_con_cas, over(Periodo) title("Contribuciones 
 
 
 
-"P2.3.2"
+*P2.3.2
 
 * Datos SIN castigo
 import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
@@ -154,7 +154,7 @@ ttest Contribucion, by(castigo)
 
 
 
-"P2.3.3"
+*P2.3.3
 
 * Datos SIN castigo
 import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear	
