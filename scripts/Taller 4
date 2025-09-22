@@ -1,10 +1,13 @@
 clear all
 set more off
 
+* Cambiar directorio a la carpeta del proyecto
+cd "C:\Users\Esteban\Desktop\Taller-4-Doing-Economics-main"
+
 *P2.1.1
 
 * Importar datos desde Excel
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_1.xlsx", sheet("Hoja1") firstrow clear
+import excel "data\raw\experimento_1.xlsx", sheet("Hoja1") firstrow clear
 
 * Renombrar variables
 rename Round rondas
@@ -30,7 +33,7 @@ twoway (line prom_contribucion ronda, lcolor(green) lwidth(medthick)), title("Co
 *P2.2.1
 
 * Importar datos SIN castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
+import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
 
 * Generar variable con promedio por periodo (todas las ciudades)
 egen Promedio = rowmean(Copenhagen-Melbourne)
@@ -49,7 +52,7 @@ save sin_castigo, replace
 
 
 * Importar datos CON castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
+import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
 
 * Generar variable con promedio por periodo (todas las ciudades)
 egen Promedio = rowmean(Copenhagen-Melbourne)
@@ -93,7 +96,7 @@ graph bar (mean) Prom_sin_cas Prom_con_cas, over(Periodo) title("Contribuciones 
 *P2.3.2
 
 * Datos SIN castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
+import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
 
 * Renombrar variable
 rename Period Periodo
@@ -118,7 +121,7 @@ save sin_castigo1, replace
 
 
 * Datos CON castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
+import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
 
 * Renombrar variable
 rename Period Periodo
@@ -157,7 +160,7 @@ ttest Contribucion, by(castigo)
 *P2.3.3
 
 * Datos SIN castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear	
+import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear	
 
 * Renombrar variable
 rename Period Periodo
@@ -182,7 +185,7 @@ save sin_castigo1, replace
 
 
 * Datos CON castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
+import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
 
 * Renombrar variable
 rename Period Periodo
@@ -215,5 +218,4 @@ append using con_castigo1
 
 * Prueba t de diferencia de medias entre las dos condiciones (Promedio de contribuciones con castigo vs sin castigo en Periodo 1)
 ttest Contribucion, by(castigo)
-
 
