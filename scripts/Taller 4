@@ -4,7 +4,7 @@ set more off
 "P2.1.1"
 
 * Importar datos desde Excel
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_1.xlsx", sheet("Hoja1") firstrow clear
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
 
 * Renombrar variables
 rename Round rondas
@@ -30,11 +30,13 @@ twoway (line prom_contribucion ronda, lcolor(green) lwidth(medthick)), title("Co
 "P2.2.1"
 
 * Importar datos SIN castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A1:R12) firstrow clear
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
+
+* Generar variable con promedio por periodo (todas las ciudades)
+egen Promedio = rowmean(Copenhagen-Melbourne)
 
 * Renonmbrar variables
-rename Contributionswithoutpunishment Periodo 
-rename R Promedio 
+rename Period Periodo
 
 *Conservar solo variables relevantes
 keep Periodo Promedio 
@@ -42,27 +44,24 @@ keep Periodo Promedio
 *Renombrar a Promedio sin castigo
 rename Promedio Prom_sin_cas
 
-*Eliminar primera fila
-drop in 1 
-
 *Guardar dataset limpio
-save sin_castigo, replace 
+save sin_castigo, replace
+
 
 * Importar datos CON castigo
-import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A15:R26) firstrow clear
+import excel "C:\Users\paola\Downloads\Taller-4-Doing-Economics-main\data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
 
-* Renombrar variables
-rename Contributionswithpunishment Periodo 
-rename R Promedio 
+* Generar variable con promedio por periodo (todas las ciudades)
+egen Promedio = rowmean(Copenhagen-Melbourne)
+
+* Renonmbrar variables
+rename Period Periodo
 
 *Conservar solo variables relevantes
-keep Period Promedio
+keep Periodo Promedio
 
 *Renombrar a Promedio con castigo
 rename Promedio Prom_con_cas
-
-* Eliminar primera fila
-drop in 1
 
 * Guardar dataset limpio
 save con_castigo, replace 
@@ -75,9 +74,6 @@ merge 1:1 Periodo using con_castigo
 destring Prom_sin_cas, replace 
 destring Prom_con_cas, replace 
 destring Periodo, replace 
-
-* Ordenar por periodo
-sort Periodo
 
 * Graficar comparación
 twoway (line Prom_sin_cas Periodo, lcolor(purple) lwidth(medthick))(line Prom_con_cas Periodo, lcolor(green) lwidth(medthick)), legend(order(1 "Sin castigo" 2 "Con castigo"))ytitle("Contribución promedio") xtitle("Período (1-10)")title("Contribuciones promedio por período")
