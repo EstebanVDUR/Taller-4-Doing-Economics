@@ -1,3 +1,7 @@
+*Encabezado:  Este script en Stata realiza la importación, limpieza, transformación y análisis de datos de dos experimentos: el primero realizado en conjunto con la clase
+* para visualizar las contribuciones por jugador; y el segundo sobre contribuciones a bienes públicos, con y sin castigo. 
+*Incluye la generación de estadísticas descriptivas, gráficos comparativos y pruebas de hipótesis (t-test) para evaluar las diferencias entre condiciones experimentales.
+
 clear all
 set more off
 cd "C:\Users\Esteban\Desktop\Taller-4-Doing-Economics-main"
