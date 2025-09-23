@@ -3,79 +3,152 @@ set more off
 cd "C:\Users\Esteban\Desktop\Taller-4-Doing-Economics-main"
 
 *P2.1.1
+
+* Importar datos desde Excel
 import excel "data\raw\experimento_1.xlsx", sheet("Hoja1") firstrow clear
+
+* Renombrar variables
 rename Round rondas
 rename Team jugadores
 rename Playerscontributions prom_contribucion
 rename PayoffsinthisGame prom_pagos
+
+* Asegurar que sea numérica	
 destring prom_contribucion, replace
 destring prom_pagos, replace
+
+* Calcular el promedio de la contribución por ronda
 collapse (mean) prom_contribucion, by (ronda)
-twoway (line prom_contribucion ronda, lcolor(green) lwidth(medthick)), ///
-    title("Contribución promedio a lo largo del juego") xtitle("Periodo") ytitle("Contribución promedio")
+
+* Graficar la contribución promedio a lo largo de las rondas
+twoway (line prom_contribucion ronda, lcolor(green) lwidth(medthick)), title("Contribución promedio a lo largo del juego") xtitle("Periodo") ytitle("Contribución promedio")
+
 
 *P2.2.1
+
+* Importar datos SIN castigo
 import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
+
+* Generar variable con promedio por periodo (todas las ciudades)
 egen Promedio = rowmean(Copenhagen-Melbourne)
+
+* Renonmbrar variables
 rename Period Periodo
+
+*Conservar solo variables relevantes
 keep Periodo Promedio
+
+*Renombrar a Promedio sin castigo
 rename Promedio Prom_sin_cas
+
+*Guardar dataset limpio
 save sin_castigo, replace
 
+
+* Importar datos CON castigo
 import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
+
+* Generar variable con promedio por periodo (todas las ciudades)
 egen Promedio = rowmean(Copenhagen-Melbourne)
+
+* Renonmbrar variables
 rename Period Periodo
+
+*Conservar solo variables relevantes
 keep Periodo Promedio
+
+*Renombrar a Promedio con castigo
 rename Promedio Prom_con_cas
+
+* Guardar dataset limpio
 save con_castigo, replace 
 
+* Unir ambos datasets
 use sin_castigo, clear
 merge 1:1 Periodo using con_castigo
+
+* Asegurar que variables sean numéricas
 destring Prom_sin_cas, replace 
 destring Prom_con_cas, replace 
 destring Periodo, replace 
-twoway (line Prom_sin_cas Periodo, lcolor(purple) lwidth(medthick))(line Prom_con_cas Periodo, lcolor(green) lwidth(medthick)), ///
-    legend(order(1 "Sin castigo" 2 "Con castigo")) ytitle("Contribución promedio") xtitle("Período (1-10)") title("Contribuciones promedio por período")
+
+* Graficar comparación
+twoway (line Prom_sin_cas Periodo, lcolor(purple) lwidth(medthick))(line Prom_con_cas Periodo, lcolor(green) lwidth(medthick)), legend(order(1 "Sin castigo" 2 "Con castigo")) ytitle("Contribución promedio") xtitle("Período (1-10)") title("Contribuciones promedio por período")
+
 
 *P2.2.2
-keep if Periodo == 1 | Periodo == 10
-graph bar (mean) Prom_sin_cas Prom_con_cas, over(Periodo) ///
-    title("Contribuciones promedio en las rondas 1 y 10") ytitle("Contribución") ///
-    legend(label(1 "Sin castigo") label(2 "Con castigo"))
-	
 
+* Conservar solo los periodos 1 y 10 (primer y último periodo del experimento)
+keep if Periodo == 1 | Periodo == 10
+
+* Graficar un gráfico de barras comparando las contribuciones promedio
+graph bar (mean) Prom_sin_cas Prom_con_cas, over(Periodo) title("Contribuciones promedio en las rondas 1 y 10") ytitle("Contribución") legend(label(1 "Sin castigo") label(2 "Con castigo"))
+	
 
 *P2.2.3 - P2.2.5 Estadísticas descriptivas para períodos 1 y 10 con y sin castigo
 
 * Preparar datos sin castigo
 import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A2:Q12) firstrow clear
+
+* Renombra la variable "Period" a "Periodo"
 rename Period Periodo
+
+* Conserva solo los datos de los periodos 1 y 10.
 keep if Periodo == 1 | Periodo == 10
-rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) ///
-       (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Renombra las variables de cada ciudad, agregando un prefijo "c_" para distinguirlas fácilmente
+rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Pasa los datos de formato ancho a formato largo
 reshape long c_, i(Periodo) j(Ciudad) string
+
+* Renombra la variable generada "c_" como "Contribucion"
 rename c_ Contribucion
+
+* Crea una variable dummy que indica "sin castigo" (=0)
 gen castigo=0
+
+* Guarda el dataset procesado temporalmente como "sin_castigo_all"
 tempfile sin_castigo_all
 save `sin_castigo_all', replace
 
+
 * Preparar datos con castigo
 import excel "data\raw\experimento_2.xlsx", sheet("Public goods contributions") cellrange(A16:Q26) firstrow clear
+
+* Renombrar variables
 rename Period Periodo
+
+* Conservar solo los periodos 1 y 10 (primer y último periodo del experimento)
 keep if Periodo == 1 | Periodo == 10
-rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) ///
-       (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Renombra las variables de cada ciudad, agregando un prefijo "c_" para distinguirlas fácilmente
+rename (Copenhagen Dnipropetrovsk Minsk StGallen Muscat Samara Zurich Boston Bonn Chengdu Seoul Riyadh Nottingham Athens Istanbul Melbourne) (c_Copenhagen c_Dnipropetrovsk c_Minsk c_StGallen c_Muscat c_Samara c_Zurich c_Boston c_Bonn c_Chengdu c_Seoul c_Riyadh c_Nottingham c_Athens c_Istanbul c_Melbourne)
+
+* Pasa los datos de formato ancho a formato largo
 reshape long c_, i(Periodo) j(Ciudad) string
+
+* Renombra la variable generada "c_" como "Contribucion".
 rename c_ Contribucion
+
+* Crea una variable dummy que indica "con castigo" (=1)
 gen castigo=1
+
+* Guarda el dataset procesado temporalmente como "con_castigo_all".
 tempfile con_castigo_all
 save `con_castigo_all', replace
 
+* Unir los dos conjuntos de datos
 use `sin_castigo_all', clear
 append using `con_castigo_all'
 
-* Tablas descriptivas con sintaxis correcta Stata 17+
-table (Periodo castigo), statistic(mean Contribucion) statistic(sd Contribucion) statistic(min Contribucion) statistic(max Contribucion) nformat(%6.2f)
+* Calcular estadísticos descriptivos por Periodo y Castigo
+collapse (mean) media=Contribucion (sd) sd=Contribucion (min) min=Contribucion (max) max=Contribucion, by(Periodo castigo)
+
+gen rango = max - min
+
+* Mostrar tabla final con todos los estadísticos
+list Periodo castigo media sd min max rango, noobs sepby(Periodo)
 
 *P2.3.2
 
