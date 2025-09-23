@@ -19,10 +19,6 @@ Preguntas de investigación
 
 Principales hallazgos
 
-En el juego sin castigo, las contribuciones promedio disminuyen gradualmente a lo largo de los períodos.
-
-En el juego con castigo, las contribuciones se mantienen altas e incluso aumentan hacia el final, lo que evidencia que el castigo funciona como un incentivo para sostener la cooperación.
-
 Las pruebas estadísticas mostraron que en el Período 1 no existen diferencias significativas entre condiciones (p ≈ 0.95), mientras que en el Período 10 sí aparecen diferencias claras y significativas (p ≈ 0.000), lo que permite atribuir los cambios observados al mecanismo de castigo.
 
 Aunque el experimento tiene limitaciones (muestra reducida, condiciones de laboratorio y bajos incentivos monetarios), los resultados coinciden con la literatura y refuerzan la importancia de las instituciones y reglas en la cooperación colectiva.
